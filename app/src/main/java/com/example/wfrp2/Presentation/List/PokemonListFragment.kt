@@ -9,13 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wfrp2.R
-import com.example.wfrp2.api.PokeApi
-import com.example.wfrp2.api.PokemonResponse
+import com.example.wfrp2.Presentation.List.api.PokemonListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
@@ -33,7 +30,7 @@ class PokemonListFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sommaire_list, container, false)
+        return inflater.inflate(R.layout.fragment_pokemon_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,22 +45,16 @@ class PokemonListFragment : Fragment() {
 
         }
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://pokeapi.co/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        Singletons.pokeApi.getPoKemonList().enqueue(object : Callback<PokemonListResponse>{
 
-        val pokeApi: PokeApi = retrofit.create(PokeApi::class.java)
-
-        pokeApi.getPoKemonList().enqueue(object: Callback<PokemonResponse>{
-            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
+            override fun onFailure(call: Call<PokemonListResponse>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
-            override fun onResponse(call: Call<PokemonResponse>, response: Response<PokemonResponse>) {
+            override fun onResponse(call: Call<PokemonListResponse>, response: Response<PokemonListResponse>) {
                 if(response.isSuccessful && response.body() !=null){
-                    val pokemonResponse : PokemonResponse =response.body()!!
-                    adapter.updateList(pokemonResponse.results)
+                    val pokemonListResponse : PokemonListResponse =response.body()!!
+                    adapter.updateList(pokemonListResponse.results)
 
                 }
             }

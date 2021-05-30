@@ -9,7 +9,7 @@
         android:id="@+id/PokemonListFragment"
         android:name="com.example.wfrp2.Presentation.List.PokemonListFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_sommaire_list">
+        tools:layout="@layout/fragment_pokemon_list">
 
         <action
             android:id="@+id/navigateToPokemonDetailFragment"
@@ -17,9 +17,9 @@
     </fragment>
     <fragment
         android:id="@+id/PokemonDetailFragment"
-        android:name="com.example.wfrp2.SecondFragment"
+        android:name="com.example.wfrp2.Presentation.List.detail.PokemonDetailFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_pokemon_detail">
 
         <action
             android:id="@+id/navigateToPokemonListFragment"
