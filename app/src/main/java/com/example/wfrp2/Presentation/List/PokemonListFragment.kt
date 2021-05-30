@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wfrp2.R
@@ -20,11 +21,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class SommaireListFragment : Fragment() {
+class PokemonListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
-    private val adapter= SommaireAdapter(listOf())
+    private val adapter= PokemonAdapter(listOf(), ::onClickedPokemon)
 
     private val layoutManager = LinearLayoutManager(context)
     override fun onCreateView(
@@ -39,9 +40,11 @@ class SommaireListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.sommaire_recyclerview)
+
+        adapter.listener
         recyclerView.apply {
-            layoutManager = this@SommaireListFragment.layoutManager
-            adapter = this@SommaireListFragment.adapter
+            layoutManager = this@PokemonListFragment.layoutManager
+            adapter = this@PokemonListFragment.adapter
 
         }
 
@@ -70,6 +73,9 @@ class SommaireListFragment : Fragment() {
 
 
 
+    }
+    private fun onClickedPokemon(pokemon: Pokemon) {
+        findNavController().navigate(R.id.navigateToPokemonDetailFragment)
     }
 
 }
