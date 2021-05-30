@@ -1,17 +1,21 @@
 package com.example.wfrp2.Presentation.List
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.wfrp2.R
-import java.util.logging.XMLFormatter
+import com.example.wfrp2.api.PokeApi
+import com.example.wfrp2.api.PokemonResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
@@ -40,13 +44,32 @@ class SommaireListFragment : Fragment() {
             adapter = this@SommaireListFragment.adapter
 
         }
-        val SommaireList : ArrayList<Categorie> = arrayListOf<Categorie>().apply {
-            add(Categorie("Races"))
-            add(Categorie("Carrières"))
-            add(Categorie("Système de jeu"))
-            add(Categorie("Reikland"))
-        }
-        adapter.updateList(SommaireList)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val pokeApi: PokeApi = retrofit.create(PokeApi::class.java)
+
+        pokeApi.getPoKemonList().enqueue(object: Callback<PokemonResponse>{
+            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onResponse(call: Call<PokemonResponse>, response: Response<PokemonResponse>) {
+                if(response.isSuccessful && response.body() !=null){
+                    val pokemonResponse : PokemonResponse =response.body()!!
+                    adapter.updateList(pokemonResponse.results)
+
+                }
+            }
+
+        })
+
+
+
+
     }
 
 }
